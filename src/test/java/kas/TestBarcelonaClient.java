@@ -52,6 +52,5 @@ public class TestBarcelonaClient {
 		Flux<Publication> result = client.getResults(params);
 		List<Publication> publications = result.collect(Collectors.toList()).block();
 		assertEquals(20, publications.size());
-		assertEquals("/api/v1/packages/50a46671-0407-469f-8641-2166af371c79", publications.get(0).getHref());
 	}
 }
