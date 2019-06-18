@@ -24,18 +24,38 @@ public class BarcelonaClient {
 		}
 	}
 	
-	public Flux<Publication> getResults(PackageResourceParameters params) {
+	/**
+	 * Escoger la url correcta segun el idioma recibido
+	 * @param res Elemento recibido del servicio rest del ayuntamiento de Barcelona
+	 * @param lang Idioma indicado en las cabeceras, por defecto catalan
+	 * @return
+	 */
+	private String calculateUrl(Result_ res, String lang) {
+		String url;
+		if("ca".equals(lang)) {
+			url = res.getUrlTornada().getCa();
+		} else if("es".equals(lang)) {
+			url = res.getUrlTornada().getEs();
+		} else if("es".equals(lang)) {
+			url = res.getUrlTornada().getEn();
+		} else {
+			url = res.getUrlTornada().getCa();
+		}
+		return url;
+	}
+	
+	public Flux<Publication> getResults(PackageResourceParameters params, String lang) {
 
 		Flux<Publication> collect = getResponse(params)
 		.map(x -> x.getResult().getResults().stream()).flatMapMany(Flux::fromStream)
-		.map(res -> new Publication(res.getCode(), res.getOrganization().getDescription(), res.getUrlTornada().getCa(), res.getId()));
+		.map(res -> new Publication(res.getCode(), res.getOrganization().getDescription(), calculateUrl(res, lang), res.getId()));
 
 		return collect;
 	}
 	
-	public Mono<Publication> getResult(PackageResourceParameters params) {
+	public Mono<Publication> getResult(PackageResourceParameters params, String lang) {
 
-		Mono<Publication> collect = getResults(params).next();
+		Mono<Publication> collect = getResults(params, lang).next();
 
 		return collect;
 	}
