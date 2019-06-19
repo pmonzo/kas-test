@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.core.annotation.Timed;
 import kas.PackageResourceParamatersFactory;
 import kas.PackageResourceParameters;
 import reactor.core.publisher.Flux;
@@ -32,13 +33,17 @@ public class PublicationController {
     public PublicationController(BarcelonaClient client) {
         this.client = client;
     }
+            
+    @Timed(value = "publication.all")
     @GetMapping(API_V1_PACKAGES)
     public Flux<Publication> all(@RequestParam Map<String, String> queryMap, @RequestHeader(value="Accept-Language") String lang) {
     	PackageResourceParameters params = PackageResourceParamatersFactory.build(null, queryMap);
         return client.getResults(params, lang);
     }
+    
+    @Timed(value = "publication.findById")
     @GetMapping(API_V1_PACKAGES + "/{id}")
-	    Mono<Publication> findById(@PathVariable String id, @RequestParam Map<String, String> queryMap, @RequestHeader(value="Accept-Language") String lang) {
+	public Mono<Publication> findById(@PathVariable String id, @RequestParam Map<String, String> queryMap, @RequestHeader(value="Accept-Language") String lang) {
     	lang = procesarAcceptLanguage(lang);
     	PackageResourceParameters params = PackageResourceParamatersFactory.build(id, queryMap);
         return client.getResult(params,lang);
