@@ -33,7 +33,7 @@ public class TestBarcelonaClient {
 		BarcelonaClient client = new BarcelonaClient();
 		PackageResourceParameters params = PackageResourceParamatersFactory.build("10", "0", "c1f07915-2d81-46fd-b394-dcb5db5119a2");
 		Mono<Publication> response = client.getResult(params, "ca");
-		assertEquals("/api/v1/packages/c1f07915-2d81-46fd-b394-dcb5db5119a2", response.block().getHref());
+		assertEquals("/api/v1/publications/c1f07915-2d81-46fd-b394-dcb5db5119a2", response.block().getHref());
 	}
 	
 	@Test

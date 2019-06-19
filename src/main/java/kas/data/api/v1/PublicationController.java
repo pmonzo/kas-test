@@ -14,10 +14,18 @@ import kas.PackageResourceParameters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Controlador para gestionar las peticiones de información contra
+ * https://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search
+ * 
+ * 
+ * @author pedro.monzo
+ *
+ */
 @RestController
 public class PublicationController {
 
-	public static final String API_V1_PACKAGES = "/api/v1/packages";
+	public static final String API_V1_PACKAGES = "/api/v1/publications";
 	
 	private final BarcelonaClient client;
 	
